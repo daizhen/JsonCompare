@@ -22,14 +22,16 @@ namespace JsonCompare
 
 		private void TestJson()
 		{
-			string jsonStr = "{'name':'dd','array':[11,22,33],'struct':{'name2':'xxx','name3':'xxx9999'}}";
-			string jsonStr2 = "{'name':'dd updated','array':[11,22,33],'struct':{'name2':'xxx','name3':'xxx9999'}}";
+			string jsonStr = "{'name':'dd','array':[11,22,33],'struct':{'name2':'xxx','name3':'xxx9999'},'arrayOfArray':[[1,2,3],[4,5,6],[3]]}";
+            string jsonStr2 = "{'name':'dd updated','array':[11,22,33,55],'struct':{'name2':'xxx','name3':'xxx9999'},'arrayOfArray':[[1,2],[4,5,6]]}";
 			JObject jobject = JObject.Parse(jsonStr);
 			JObject jobject2 = JObject.Parse(jsonStr2);
 
 			CompareHandler handler = new CompareHandler();
 
-			CompareStruct compareResult = handler.Compare(jobject, jobject2);
+			CompareStruct compareResult = handler.CompareStruct(jobject, jobject2);
+
+            string xml = compareResult.ToXML("descriptor");
 			//foreach (var childNode in jobject.Children())
 			//{
 			//	//JValue, JArray, JObject

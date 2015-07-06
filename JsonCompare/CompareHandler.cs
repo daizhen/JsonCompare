@@ -9,7 +9,44 @@ namespace JsonCompare
 {
 	public class CompareHandler
 	{
-		public CompareStruct Compare(JObject originalObject, JObject newObject)
+
+
+        private object Compare(object originalValue, object newValue)
+        {
+            object temObject = null;
+
+            if (originalValue != null)
+            {
+                temObject = originalValue;
+            }
+            else if (newValue != null)
+            {
+                temObject = newValue;
+            }
+
+            if(temObject == null)
+            {
+                throw new Exception("Both values are null");
+            }
+
+            if (temObject.GetType() == typeof(JObject))
+            {
+                return CompareStruct(originalValue as JObject, newValue as JObject);
+            }
+            if (temObject.GetType() == typeof(JArray))
+            {
+                return CompareArray(originalValue as JArray, newValue as JArray);
+            }
+            if (temObject.GetType() == typeof(JValue))
+            {
+                return CompareBasic(originalValue as JValue, newValue as JValue);
+            }
+
+            throw new Exception("Not supported type");
+        }
+
+
+		public CompareStruct CompareStruct(JObject originalObject, JObject newObject)
 		{
 			CompareStruct resultStruct = new CompareStruct();
 
@@ -18,35 +55,35 @@ namespace JsonCompare
 				var property = childNode as JProperty;
 				string name = property.Name;
 				var value = property.Value;
-
-				if (value is JValue)
-				{
-					resultStruct.Fields.Add(name, Compare(value as JValue, newObject[name] as JValue));
-				}
-				else if (value is JArray)
-				{
-					resultStruct.Fields.Add(name, Compare(value as JArray, newObject[name] as JArray));
-				}
-				else
-				{
-					resultStruct.Fields.Add(name, Compare(value as JObject, newObject[name] as JObject));
-				}
+                resultStruct.Fields.Add(name, Compare(value, newObject[name]));
 			}
 			return resultStruct;
 		}
 
-		public CompareArray Compare(JArray originalArray, JArray newArray)
+		public CompareArray CompareArray(JArray originalArray, JArray newArray)
 		{
 			CompareArray resultArray = new CompareArray();
+
+            if (newArray == null && originalArray == null)
+            {
+                throw new Exception("Both values are null..");
+            }
 
 			if (newArray == null && originalArray != null)
 			{
 				//Original value was deleted.
-
+                foreach (JToken item in originalArray)
+                {
+                    resultArray.Items.Add(Compare(item, null));
+                }
 			}
 			else if (originalArray == null && newArray !=null)
 			{
 				//New added items.
+                foreach (JToken item in newArray)
+                {
+                    resultArray.Items.Add(Compare(null, item));
+                }
 			}
 			else
 			{
@@ -55,89 +92,48 @@ namespace JsonCompare
 					if (i >= newArray.Count)
 					{
 						//Original value was deleted
-						if (originalArray[i] is JValue)
-						{
-							string originalValue = (originalArray[i] as JValue).Value.ToString();
-							resultArray.Items.Add(new CompareBasic() { Type = ChangeType.Delete, OriginalValue = originalValue, NewValue = null });
-						}
-						else if (originalArray[i] is JArray)
-						{
-							resultArray.Items.Add(Compare(originalArray[i] as JArray, null));
-						}
-						else if (originalArray[i] is JObject)
-						{
-							resultArray.Items.Add(Compare(originalArray[i] as JObject, null));
-						}
-						else
-						{
-							throw new Exception("Not supported.." + originalArray[i].GetType().ToString());
-						}
+                        resultArray.Items.Add(Compare(originalArray[i], null));
 					}
 					else
 					{
 						//Original value was updated
-						if (originalArray[i] is JValue)
-						{
-							string originalValue = (originalArray[i] as JValue).Value.ToString();
-							string newValue = (newArray[i] as JValue).Value.ToString();
-							if (IsEqual(originalArray[i] as JValue, newArray[i] as JValue))
-							{
-								resultArray.Items.Add(new CompareBasic() { Type = ChangeType.None, OriginalValue = originalValue, NewValue = newValue });
-							}
-							else
-							{
-								resultArray.Items.Add(new CompareBasic() { Type = ChangeType.Update, OriginalValue = originalValue, NewValue = newValue });
-							}
-						}
-						else if (originalArray[i] is JArray)
-						{
-						}
-						else if (originalArray[i] is JObject)
-						{
-						}
-						else
-						{
-							throw new Exception("Not supported.." + originalArray[i].GetType().ToString());
-						}
+                        resultArray.Items.Add(Compare(originalArray[i], newArray[i]));
 					}
 				}
 				for (int i = originalArray.Count; i < newArray.Count; i++)
 				{
 					//Original value was added
-					if (newArray[i] is JValue)
-					{
-						string newValue = (newArray[i] as JValue).Value.ToString();
-						resultArray.Items.Add(new CompareBasic() { Type = ChangeType.Add, OriginalValue = null, NewValue = newValue });
-					}
-					else if (originalArray[i] is JArray)
-					{
-					}
-					else if (originalArray[i] is JObject)
-					{
-
-					}
-					else
-					{
-						throw new Exception("Not supported.." + originalArray[i].GetType().ToString());
-					}
+                    resultArray.Items.Add(Compare(null, newArray[i]));
 				}
 			}
 			return resultArray;
 		}
 
-		public CompareBasic Compare(JValue originalValue, JValue newValue)
+		public CompareBasic CompareBasic(JValue originalValue, JValue newValue)
 		{
 			CompareBasic compareBasic = new CompareBasic();
-			if (IsEqual(originalValue, newValue))
-			{
-				compareBasic.Type = ChangeType.None;
-			}
-			else
-			{
-				compareBasic.Type = ChangeType.Update;
-			}
 
-			if (originalValue.Value != null)
+            if (originalValue == null && newValue != null)
+            {
+                compareBasic.Type = ChangeType.Add;
+            }
+            else if (originalValue != null && newValue == null)
+            {
+                compareBasic.Type = ChangeType.Delete;
+            }
+            else
+            {
+                if (IsEqual(originalValue, newValue))
+                {
+                    compareBasic.Type = ChangeType.None;
+                }
+                else
+                {
+                    compareBasic.Type = ChangeType.Update;
+                }
+            }
+
+            if (originalValue !=null && originalValue.Value != null)
 			{
 				compareBasic.OriginalValue = originalValue.Value.ToString();
 			}
@@ -146,7 +142,7 @@ namespace JsonCompare
 				compareBasic.OriginalValue = string.Empty;
 			}
 
-			if (newValue.Value != null)
+            if (newValue != null && newValue.Value != null)
 			{
 				compareBasic.NewValue = newValue.Value.ToString();
 			}
@@ -165,9 +161,9 @@ namespace JsonCompare
 				return true;
 			}
 
-			if (originalValue.Value != null)
+			if (originalValue!=null &&  originalValue.Value != null)
 			{
-				if (newValue.Value == null)
+                if (newValue == null || newValue.Value == null)
 				{
 					return false;
 				}
