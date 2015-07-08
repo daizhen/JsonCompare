@@ -89,7 +89,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="XSL_Files\book.xsl" />
+    <Content Include="XSL_Files\ScriptLibrary.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="XSL_Files\book.xsl">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="XSL_Files\book.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
