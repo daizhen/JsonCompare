@@ -3,16 +3,12 @@
   xmlns:msxsl="urn:schemas-microsoft-com:xslt"
 xmlns:myNS="urn:myNameSpace">
   <msxsl:script language="c#" implements-prefix="myNS">
-
+    <msxsl:assembly name="JsonCompareLib"/>
+  <msxsl:using namespace="JsonCompareLib"/>
     <![CDATA[
-
-public string trans(string s)
-{
-  return "<b>"+s+" ....====</b>";
-}
 public string Diff(string originalText, string newText)
 {
-  return originalText + "<br/>"+newText;
+  return new LineDiff().CreateDiffHtml(originalText,newText);
 }
 
 ]]>

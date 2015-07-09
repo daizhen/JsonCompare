@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:cmn="http://schemas.hp.com/SM/7/Common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns="http://schemas.hp.com/SM/7" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://schemas.xmlsoap.org/wsdl/  http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://schemas.hp.com/SM/7" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xs:schema xmlns="http://schemas.hp.com/SM/7" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://schemas.hp.com/SM/7" version="2015-04-26 Rev 2" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import schemaLocation="http://www.w3.org/2005/05/xmlmime" namespace="http://www.w3.org/2005/05/xmlmime" />
+      <xs:import schemaLocation="http://psmadv01.edev.elabs.eds.com:47002/SM/7/Common.xsd" namespace="http://schemas.hp.com/SM/7/Common" />
+      <xs:complexType name="CompareServiceKeysType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="cmn:StringType" />
+        </xs:sequence>
+        <xs:attribute name="query" type="xs:string" use="optional" />
+        <xs:attribute name="updatecounter" type="xs:long" use="optional" />
+      </xs:complexType>
+      <xs:complexType name="CompareServiceInstanceType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="cmn:StringType" />
+          <xs:element minOccurs="0" name="Content" nillable="true" type="cmn:StringType" />
+          <xs:element minOccurs="0" name="QueryString" nillable="true" type="cmn:StringType" />
+          <xs:element minOccurs="0" name="attachments" nillable="true" type="cmn:AttachmentsType" />
+        </xs:sequence>
+        <xs:attribute name="query" type="xs:string" use="optional" />
+        <xs:attribute name="uniquequery" type="xs:string" use="optional" />
+        <xs:attribute name="recordid" type="xs:string" use="optional" />
+        <xs:attribute name="updatecounter" type="xs:long" use="optional" />
+      </xs:complexType>
+      <xs:complexType name="CompareServiceModelType">
+        <xs:sequence>
+          <xs:element name="keys" type="ns:CompareServiceKeysType" />
+          <xs:element name="instance" type="ns:CompareServiceInstanceType" />
+          <xs:element minOccurs="0" name="messages" type="cmn:MessagesType" />
+        </xs:sequence>
+        <xs:attribute name="query" type="xs:string" use="optional" />
+      </xs:complexType>
+      <xs:element name="RetrieveCompareServiceRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="ns:CompareServiceModelType" />
+          </xs:sequence>
+          <xs:attribute name="attachmentInfo" type="xs:boolean" use="optional" />
+          <xs:attribute name="attachmentData" type="xs:boolean" use="optional" />
+          <xs:attribute default="true" name="ignoreEmptyElements" type="xs:boolean" use="optional" />
+          <xs:attribute name="updatecounter" type="xs:boolean" use="optional" />
+          <xs:attribute name="handle" type="xs:string" use="optional" />
+          <xs:attribute name="count" type="xs:long" use="optional" />
+          <xs:attribute name="start" type="xs:long" use="optional" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="RetrieveCompareServiceResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="ns:CompareServiceModelType" />
+            <xs:element minOccurs="0" name="messages" type="cmn:MessagesType" />
+          </xs:sequence>
+          <xs:attribute name="status" type="cmn:StatusType" use="required" />
+          <xs:attribute name="message" type="xs:string" use="required" />
+          <xs:attribute name="schemaRevisionDate" type="xs:date" use="required" />
+          <xs:attribute name="schemaRevisionLevel" type="xs:int" use="required" />
+          <xs:attribute name="returnCode" type="xs:decimal" use="optional" />
+          <xs:attribute name="query" type="xs:string" use="optional" />
+          <xs:attribute name="handle" type="xs:string" use="optional" />
+          <xs:attribute name="count" type="xs:long" use="optional" />
+          <xs:attribute name="more" type="xs:boolean" use="optional" />
+          <xs:attribute name="start" type="xs:long" use="optional" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="RetrieveCompareServiceKeysListRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="ns:CompareServiceModelType" />
+          </xs:sequence>
+          <xs:attribute name="attachmentInfo" type="xs:boolean" use="optional" />
+          <xs:attribute name="attachmentData" type="xs:boolean" use="optional" />
+          <xs:attribute default="true" name="ignoreEmptyElements" type="xs:boolean" use="optional" />
+          <xs:attribute name="updatecounter" type="xs:boolean" use="optional" />
+          <xs:attribute name="handle" type="xs:string" use="optional" />
+          <xs:attribute name="count" type="xs:long" use="optional" />
+          <xs:attribute name="start" type="xs:long" use="optional" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="RetrieveCompareServiceKeysListResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="keys" type="ns:CompareServiceKeysType" />
+            <xs:element minOccurs="0" name="messages" type="cmn:MessagesType" />
+          </xs:sequence>
+          <xs:attribute name="status" type="cmn:StatusType" use="required" />
+          <xs:attribute name="message" type="xs:string" use="required" />
+          <xs:attribute name="schemaRevisionDate" type="xs:date" use="required" />
+          <xs:attribute name="schemaRevisionLevel" type="xs:int" use="required" />
+          <xs:attribute name="returnCode" type="xs:decimal" use="optional" />
+          <xs:attribute name="query" type="xs:string" use="optional" />
+          <xs:attribute name="handle" type="xs:string" use="optional" />
+          <xs:attribute name="count" type="xs:long" use="optional" />
+          <xs:attribute name="more" type="xs:boolean" use="optional" />
+          <xs:attribute name="start" type="xs:long" use="optional" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="RetrieveCompareServiceListRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="keys" type="ns:CompareServiceKeysType" />
+          </xs:sequence>
+          <xs:attribute name="attachmentInfo" type="xs:boolean" use="optional" />
+          <xs:attribute name="attachmentData" type="xs:boolean" use="optional" />
+          <xs:attribute default="true" name="ignoreEmptyElements" type="xs:boolean" use="optional" />
+          <xs:attribute name="updatecounter" type="xs:boolean" use="optional" />
+          <xs:attribute name="handle" type="xs:string" use="optional" />
+          <xs:attribute name="count" type="xs:long" use="optional" />
+          <xs:attribute name="start" type="xs:long" use="optional" />
+          <xs:attribute name="attachmentType" type="xs:long" use="optional" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="RetrieveCompareServiceListResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="instance" type="ns:CompareServiceInstanceType" />
+            <xs:element minOccurs="0" name="messages" type="cmn:MessagesType" />
+          </xs:sequence>
+          <xs:attribute name="status" type="cmn:StatusType" use="required" />
+          <xs:attribute name="message" type="xs:string" use="required" />
+          <xs:attribute name="schemaRevisionDate" type="xs:date" use="required" />
+          <xs:attribute name="schemaRevisionLevel" type="xs:int" use="required" />
+          <xs:attribute name="returnCode" type="xs:decimal" use="optional" />
+          <xs:attribute name="query" type="xs:string" use="optional" />
+          <xs:attribute name="handle" type="xs:string" use="optional" />
+          <xs:attribute name="count" type="xs:long" use="optional" />
+          <xs:attribute name="more" type="xs:boolean" use="optional" />
+          <xs:attribute name="start" type="xs:long" use="optional" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SaveCompareServiceRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="ns:CompareServiceModelType" />
+          </xs:sequence>
+          <xs:attribute name="attachmentInfo" type="xs:boolean" use="optional" />
+          <xs:attribute name="attachmentData" type="xs:boolean" use="optional" />
+          <xs:attribute default="true" name="ignoreEmptyElements" type="xs:boolean" use="optional" />
+          <xs:attribute default="-1" name="updateconstraint" type="xs:long" use="optional" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SaveCompareServiceResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="ns:CompareServiceModelType" />
+            <xs:element minOccurs="0" name="messages" type="cmn:MessagesType" />
+          </xs:sequence>
+          <xs:attribute name="status" type="cmn:StatusType" use="required" />
+          <xs:attribute name="message" type="xs:string" use="required" />
+          <xs:attribute name="schemaRevisionDate" type="xs:date" use="required" />
+          <xs:attribute name="schemaRevisionLevel" type="xs:int" use="required" />
+          <xs:attribute name="returnCode" type="xs:decimal" use="optional" />
+          <xs:attribute name="query" type="xs:string" use="optional" />
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </types>
+  <message name="RetrieveCompareServiceRequest">
+    <part name="RetrieveCompareServiceRequest" element="ns:RetrieveCompareServiceRequest" />
+  </message>
+  <message name="RetrieveCompareServiceResponse">
+    <part name="RetrieveCompareServiceResponse" element="ns:RetrieveCompareServiceResponse" />
+  </message>
+  <message name="RetrieveCompareServiceKeysListRequest">
+    <part name="RetrieveCompareServiceKeysListRequest" element="ns:RetrieveCompareServiceKeysListRequest" />
+  </message>
+  <message name="RetrieveCompareServiceKeysListResponse">
+    <part name="RetrieveCompareServiceKeysListResponse" element="ns:RetrieveCompareServiceKeysListResponse" />
+  </message>
+  <message name="RetrieveCompareServiceListRequest">
+    <part name="RetrieveCompareServiceListRequest" element="ns:RetrieveCompareServiceListRequest" />
+  </message>
+  <message name="RetrieveCompareServiceListResponse">
+    <part name="RetrieveCompareServiceListResponse" element="ns:RetrieveCompareServiceListResponse" />
+  </message>
+  <message name="SaveCompareServiceRequest">
+    <part name="SaveCompareServiceRequest" element="ns:SaveCompareServiceRequest" />
+  </message>
+  <message name="SaveCompareServiceResponse">
+    <part name="SaveCompareServiceResponse" element="ns:SaveCompareServiceResponse" />
+  </message>
+  <portType name="CompareService">
+    <operation name="RetrieveCompareService">
+      <documentation />
+      <input message="ns:RetrieveCompareServiceRequest" />
+      <output message="ns:RetrieveCompareServiceResponse" />
+    </operation>
+    <operation name="RetrieveCompareServiceKeysList">
+      <documentation />
+      <input message="ns:RetrieveCompareServiceKeysListRequest" />
+      <output message="ns:RetrieveCompareServiceKeysListResponse" />
+    </operation>
+    <operation name="RetrieveCompareServiceList">
+      <documentation />
+      <input message="ns:RetrieveCompareServiceListRequest" />
+      <output message="ns:RetrieveCompareServiceListResponse" />
+    </operation>
+    <operation name="SaveCompareService">
+      <documentation />
+      <input message="ns:SaveCompareServiceRequest" />
+      <output message="ns:SaveCompareServiceResponse" />
+    </operation>
+  </portType>
+  <binding name="CompareService" type="ns:CompareService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="RetrieveCompareService">
+      <soap:operation soapAction="Retrieve" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="RetrieveCompareServiceKeysList">
+      <soap:operation soapAction="RetrieveKeysList" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="RetrieveCompareServiceList">
+      <soap:operation soapAction="RetrieveList" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="SaveCompareService">
+      <soap:operation soapAction="Save" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="CompareService">
+    <port name="CompareService" binding="ns:CompareService">
+      <soap:address location="http://psmadv01.edev.elabs.eds.com:47002/SM/7/ws" />
+    </port>
+  </service>
+</definitions>

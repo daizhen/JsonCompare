@@ -36,6 +36,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,7 +44,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ChangeType.cs" />
+    <Compile Include="CompareArray.cs" />
+    <Compile Include="CompareBasic.cs" />
+    <Compile Include="CompareHandler.cs" />
+    <Compile Include="CompareStruct.cs" />
+    <Compile Include="IXML.cs" />
+    <Compile Include="LineDiff.cs" />
+    <Compile Include="MultiLineDiff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

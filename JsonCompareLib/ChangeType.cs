@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace JsonCompareLib
 {
-    public class Class1
-    {
-    }
+	public enum ChangeType
+	{
+		Add,
+		Update,
+		Delete,
+		None
+	}
 }
